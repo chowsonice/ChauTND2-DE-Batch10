@@ -1,14 +1,15 @@
-# Homework
-
 Date: 27/03/2024
 StudentID: ChauTND2
 
 ## Ex1: Online vs Offline extraction. Example?
+
+![[Pasted image 20240529230755.png]]
+
 |             | Online extraction                                                                                                                                                 | Offline extraction                                                                                                                                                                                                                       |
 | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Definitions | Online extraction is the process of extracting data by interacting directly with the data source (querying a database, API, etc.), in real-time or near real-time | Offline extraction entails extracting data from the source and storing it elsewhere, such as dump files, archive logs, backups, or data lakes. This is used when real-time interaction with the data source is not feasible or practical |
-| Use cases   | Online extraction is used when there is a need for real-time analysis (sales, stocks, etc.) or the data tends to change quickly and dynamically                   | Offline extraction is used when there is no need for real-time analysis, such as for studies, historical trend analysis, periodical reporting, etc.                                                                                      |
-| Examples    | A retail company analyzes real-time sales trends by maintaining a direct connection to continuously access the latest transaction data                            | Daily logs are extracted and stored in a data lake. These logs are later accessed for various purposes                                                                                                                                   |
+| Use cases   | Online extraction is used when there is a need for real-time analysis (sales, stocks, etc.) or the data tends to change quickly and dynamically                   | Offline extraction is used when there is no need for real-time analysis, such as for studies, historical trend analysis, periodic reporting, etc.                                                                                        |
+| Examples    | A retail company analyses real-time sales trends by maintaining a direct connection to continuously access the latest transaction data                            | Daily transaction logs are extracted and stored in a data lake. These logs are later accessed for various purposes, like monthly sales report                                                                                            |
 
 ## Ex2: ETL vs ELT?
 |               | ETL                                                                                                                                           | ELT                                                                                                                                                                                                 |
@@ -18,9 +19,15 @@ StudentID: ChauTND2
 | Advantages    | Assure data quality, as all data are cleansed, transformed and normalized before storing in DW                                                | Preserve the entire raw data, offering flexibility for various use cases                                                                                                                            |
 | Disadvantages | May result in missing some parts of the data due to pre-transformation                                                                        | Requires more storage                                                                                                                                                                               |
 | When to use   | Suited for smaller datasets or when transformation requirements are well-defined and consistent                                               | Preferred for handling large volumes of data and scenarios where data structures and transformation needs may vary over time or across different analytical purposes (like large company's data)    |
+![[Pasted image 20240529230649.png]]
+### What do companies use these days?
+From my research, ETL (Extract, Transform, Load) used to be the standard procedure primarily due to the high costs of cloud storage in the past. To minimise data size while maintaining analysis quality, people needed to cleanse and filter data, retaining only essential components. However, with advancements in technology and the decreasing costs of cloud storage, the approach to data handling has evolved.
+Nowadays, there's a growing trend towards preserving entire raw data sets for later transformations. This shift is driven by factors such as more affordable cloud storage, the recognition of the value of raw data for future analysis, and the increasing variety of use cases requiring access to detailed, unaltered data.
+While ETL processes are still relevant, especially for specific analytical tasks requiring data transformation and aggregation, ELT enables organisations to explore new insights, support machine learning initiatives, analyse historical trends, and meet compliance requirements. 
+However, albeit minimal, some level of transformation or standardisation may still occur as part of the data management process, so that the data is searchable, restructured in the correct format, etc. so the process could be EtTL.
+![[Pasted image 20240529230631.png]]
 
 ## Ex3: Virtual Environment vs Virtual Machine vs Container.
-
 ![](Images/Pasted%20image%2020240528112938.png)
 
 |                 | Virtual Environment                                                                                                                   | Virtual Machine                                                                                                                                          | Container                                                                   |
