@@ -30,12 +30,3 @@ WORKDIR ${AIRFLOW_HOME}
 COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
-
-FROM ubuntu:24.10
-
-COPY --from=build /usr/local/airflow /usr/local/airflow
-
-ENV AIRFLOW_HOME=/usr/local/airflow
-ENV PATH="${PATH}:/usr/local/airflow/venv/bin"
-
-CMD ["airflow", "init", "db"]
