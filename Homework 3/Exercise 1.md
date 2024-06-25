@@ -49,7 +49,7 @@ Vậy ta thấy, do không có filter `WHERE` nên `GROUP BY` phải xử lý nh
 ### Thực nghiệm trong PostgreSQL
 #### Dataset used
 - [AnimeList Dataset](https://www.kaggle.com/datasets/svanoo/myanimelist-dataset/data)
-- Trong ví dụ này, ta có hai bảng, bảng `animelist_user` và bảng `user_review`
+- Trong ví dụ này, ta có hai bảng, bảng `animelist_user` (1 123 284 dòng) và bảng `user_review` (9 951 550 dòng)
 #### Query thực hiện:
 ##### Query sử dụng `HAVING`:
 Query:
