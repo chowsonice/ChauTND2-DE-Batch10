@@ -63,8 +63,8 @@ where au.mean_score > 9.5
 group by au.user_id 
 ```
 Execution plan:
-![](Pasted%20image%2020240624142953.png)
-![](Pasted%20image%2020240624143103.png)
+![](Images/Pasted%20image%2020240624142953.png)
+![](Images/Pasted%20image%2020240624143103.png)
 ##### Query sử dụng `WHERE`:
 Query:
 ```SQL
@@ -77,8 +77,8 @@ group by au.user_id
 having au.mean_score > 9.5 
 ```
 Execution plan:
-![](Pasted%20image%2020240624143227.png)
-![](Pasted%20image%2020240624143256.png)
+![](Images/Pasted%20image%2020240624143227.png)
+![](Images/Pasted%20image%2020240624143256.png)
 
 #### Kết luận
 Ta thấy rằng, tuy là điều kiện filter ở tận `HAVING`, nhưng PostgreSQL đã bắt đầu xử lý filter đó từ đầu, giống như đang sử dụng `WHERE` vậy. Ta thấy rằng PostgreSQL đã tự động tối ưu hoá câu truy vấn để xử lý rồi.
