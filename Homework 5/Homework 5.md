@@ -2,19 +2,49 @@
 
 Creating a comparison table for different types of objects used in SQL like Common Table Expressions (CTE), Views, Temporary Tables, Table Variables, and Inline Table-Valued Functions (TVF) can help illustrate their differences:
 
-| Feature                 | CTE                | View              | Temporary Table                                   | Table Variable                      | Inline TVF                        |
-| ----------------------- | ------------------ | ----------------- | ------------------------------------------------- | ----------------------------------- | --------------------------------- |
-| **Scope**               | Statement-specific | Database-wide     | Session-specific or Transaction-specific          | Function-specific or batch-specific | Function-specific                 |
-| **Storage**             | None (Virtual)     | Stored (as query) | Disk (TempDB)                                     | Disk (TempDB)                       | None (Virtual)                    |
-| **Usage**               | Reusable within    | Reusable          | Storing intermediate results                      | Holding small intermediate results  | Reusable within                   |
-| **Modifiability**       | Static             | Dynamic           | Dynamic                                           | Dynamic                             | Dynamic                           |
-| **Performance**         | Depends on query   | Pre-compiled      | Generally faster                                  | Faster than temp tables             | Inline execution context-specific |
-| **Indexing**            | No                 | Yes               | Yes                                               | No                                  | No                                |
-| **Transaction control** | Follows query      | Follows database  | Yes                                               | Yes                                 | Follows query                     |
-| **As parameters**       | No                 | No                | No                                                | Yes                                 | No                                |
-| **Takes parameters**    | No                 | No                | No                                                | No                                  | Yes                               |
-| **Visibility**          | Only within CTE    | Database-wide     | Session-specific (Local) or Session-wide (Global) | Function or batch scope             | Only within the function          |
+Here's an expanded table with specific use cases to help determine when to use each option:
 
+| Feature                 | CTE                                  | View                        | Temporary Table                          | Table Variable                         | Inline TVF                              |
+| ----------------------- | ------------------------------------ | --------------------------- | ---------------------------------------- | -------------------------------------- | --------------------------------------- |
+| **Scope**               | Statement-specific                   | Database-wide               | Session-specific or Transaction-specific | Batch-specific or Function-specific    | Function-specific                       |
+| **Storage**             | None (Virtual)                       | Stored (as query)           | Disk (TempDB)                            | Disk (TempDB)                          | None (Virtual)                          |
+| **Usage**               | Ad-hoc query logic                   | Reusable query logic        | Storing intermediate results             | Holding small intermediate results     | Reusable encapsulated logic             |
+| **Modifiability**       | Static                               | Static/Dynamic              | Dynamic                                  | Dynamic                                | Dynamic                                 |
+| **Performance**         | Query-dependent                      | Pre-compiled                | Generally faster                         | Faster than temp tables for small data | Inline execution context-specific       |
+| **Indexing**            | No                                   | Yes                         | Yes                                      | No                                     | No                                      |
+| **Transaction Control** | Follows query                        | Follows database            | Yes                                      | Yes                                    | Follows query                           |
+| **As Parameters**       | No                                   | No                          | No                                       | Yes                                    | No                                      |
+| **Takes Parameters**    | No                                   | No                          | No                                       | No                                     | Yes                                     |
+| **Use Cases**           | Complex joins, recursive **queries** | Simplifying complex queries | Large temporary data manipulations       | Small temporary data manipulations     | Encapsulating and reusing complex logic |
+
+### Detailed Use Cases:
+
+1. **Common Table Expressions (CTE)**
+   - **When to Use**: When you need to simplify complex joins or recursive queries within a single statement.
+   - **Example**: Generating hierarchical data or creating temporary sets for a specific query.
+   - **Usage**: Simplifying readability of complex queries and performing recursive operations.
+
+2. **View**
+   - **When to Use**: When you have a query that needs to be reused across multiple queries and applications.
+   - **Example**: Creating a standardized way to access specific columns from multiple tables.
+   - **Usage**: Encapsulating business logic, abstracting complex queries, and simplifying maintenance.
+
+3. **Temporary Table**
+   - **When to Use**: When you need to store and manipulate large intermediate results within a session or transaction.
+   - **Example**: Performing complex calculations that require multiple steps.
+   - **Usage**: Handling large sets of data temporarily for batch processing or complex transactions.
+
+4. **Table Variable**
+   - **When to Use**: When you need to store and manipulate small intermediate results within a batch or function.
+   - **Example**: Using a small dataset in a stored procedure or function.
+   - **Usage**: Holding temporary data in a controlled scope with potentially better performance for small datasets.
+
+5. **Inline Table-Valued Function (TVF)**
+   - **When to Use**: When you need to encapsulate complex logic that returns a table and reuse it like a view.
+   - **Example**: Creating a function that returns a set of rows based on input parameters.
+   - **Usage**: Encapsulating and reusing complex query logic, allowing for parameterized queries.
+
+This table and the use cases should help you decide which option is best suited for different scenarios in your SQL operations.
 ## CTE (Common Table Expression)
 ```sql
 WITH cte_name AS (QUERY)
@@ -158,8 +188,7 @@ DECLARE @table_variable_name TABLE (TABLE DEFINITION)
 	- Statistics are not maintained on table variables, leading to less efficient query plans for large datasets (?)
 - When to use Table Variable over Temporary Table?
 	- Small, less complex datasets
-	- Few locking resources (?) [^8]
-	- Limited to scope, reducing side effects on system (?) [^8]
+	- Loose locking resources [^8]
 	- Free memory early [^7]
 ## Inline TVFs (Inline Table-Valued Function)
 ```sql
