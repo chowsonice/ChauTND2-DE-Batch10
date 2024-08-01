@@ -20,3 +20,60 @@
 | 4 cores, 200 partitions  | Duration: 23s<br>Shuffle Write: 258.9MiB | Duration: 27s<br>Shuffle Write: 29.1MiB  |
 | 4 cores, 1000 partitions | Duration: 27s<br>Shuffle Write: 410.0MiB | Duration: 38s<br>Shuffle Write: 215.0MiB |
 ![](Pasted%20image%2020240730213800.png)
+Observations:
+- `groupByKey` shuffles data a lot, on average 10 times more than `reduceByKey`
+- The duration of `groupByKey` and `reduceByKey` don't have much difference
+- `groupByKey` groups all the values according to their key
+	- It returns an RDD of `(key, Iterable[values])` pairs 
+	- Shuffle → RDD of `(key, Iterable[values])` → Aggregate
+	- `groupByKey` can cause out of disk problems as data is sent over the network and collected on the reduced workers. [^1]
+- `reduceByKey` groups the values according to their key, applies a specified reduction function to combine them into a single value per key. 
+	- It returns an RDD of `(key, reducedValue)` pairs
+	- Aggregate on each partition → RDD of `(key, reducedValue)` → Shuffle → Aggregate
+	- `reduceByKey` combines data at each partition, with only one output for one key at each partition to send over the network
+
+`groupByKey`
+Initial data
+```
+1: (a, 1), (b, 4), (c, 3), (a, 4), (c, 3)
+2: (a, 5), (b, 2), (a, 2), (c, 3)
+3: (b, 4), (c, 1), (c, 3)
+```
+Shuffle
+```
+1: (a, [1, 4, 5, 2])
+2: (b, [4, 2, 4])
+3: (c, [3, 3, 3, 1, 3])
+```
+Aggregate
+```
+1: (a, 12)
+2: (b, 10)
+3: (c, 13)
+```
+
+`reduceByKey`
+Initial data
+```
+1: (a, 1), (b, 4), (c, 3), (a, 4), (c, 3)
+2: (a, 5), (b, 2), (a, 2), (c, 3)
+3: (b, 4), (c, 1), (c, 3)
+```
+Aggregate
+```
+1: (a, 5), (b, 4), (c, 6)
+2: (a, 7), (b, 2), (c, 3)
+3: (b, 4), (c, 4)
+```
+Shuffle
+```
+1: (a, 5), (a, 7)
+2: (b, 4), (b, 2), (b, 4)
+3: (c, 6), (c, 3), (c, 4)
+```
+Aggregate
+```
+1: (a, 12)
+2: (b, 10)
+3: (c, 13)
+```
