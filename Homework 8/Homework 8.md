@@ -1,46 +1,17 @@
-## Exercise 1: No fries?
+## Exercise 1: Compare Filter Before and After Join
 ### RDD
-### Dataframe
-#### Filter after Join
-Parsed Logical Plan 
-```sql
-== Parsed Logical Plan ==
-Filter (order_item_product_id = 127)
-+- Filter order_status IN (COMPLETE,CLOSED)
-   +- Join Inner
-      :- Project
-      :  +- Relation csv
-      +- Project 
-         +- Relation csv
-```
 
-Optimized Logical Plan
-```sql
-== Optimized Logical Plan ==
-Join Inner
-:- Project
-:  +- Filter
-:     +- Relation 
-+- Project 
-   +- Filter 
-      +- Relation csv
-```
+Unfiltered Join with RDD: 29.78 seconds
+Execution plan:
+![|400](Pasted%20image%2020240808084222.png)
+Filtered Join with RDD: 2.51 seconds
+Stages:
+![](Pasted%20image%2020240808090127.png)
+Lineage graph:
+![|400](Pasted%20image%2020240808084449.png)
 
-Physical Plan
-```sql
-== Physical Plan ==
-AdaptiveSparkPlan isFinalPlan=true
-+- == Final Plan ==
-   *(2) BroadcastHashJoin 
-   :- ShuffleQueryStage 
-   :  +- Exchange SinglePartition
-   :     +- *(1) Project 
-   :        +- *(1) Filter
-   :           +- FileScan csv 
-   +- *(2) Project 
-      +- *(2) Filter
-         +- FileScan csv 
-```
+### Dataframe 
+
 
 ### Filter before Join
 Parsed Logical Plan
@@ -83,7 +54,7 @@ AdaptiveSparkPlan isFinalPlan=true
          +- FileScan csv 
 ```
 
-Exercise 2: Multi-worker and Partitions
+## Exercise 2: Multi-worker and Partitions
 1 worker 1 partition
 ![](Pasted%20image%2020240806212653.png)
 ![](Pasted%20image%2020240806212704.png)
