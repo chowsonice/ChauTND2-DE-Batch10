@@ -8,7 +8,7 @@
 | 4 cores, 100 partitions  | Duration: 6s<br>Shuffle Write: 187.0MiB  | Duration: 8s<br>Shuffle Write: 72.5KiB   |
 | 4 cores, 200 partitions  | Duration: 18s<br>Shuffle Write: 187.1MiB | Duration: 9s<br>Shuffle Write: 144.1KiB  |
 | 4 cores, 1000 partitions | Duration: 18s<br>Shuffle Write: 187.5MiB | Duration: 23s<br>Shuffle Write: 718.8KiB |
-![](Pasted%20image%2020240730213813.png)
+![](Images/Pasted%20image%2020240730213813.png)
 10000 keys, 50mil values
 
 |                          | GroupByKey                               | ReduceByKey                              |
@@ -19,7 +19,7 @@
 | 4 cores, 100 partitions  | Duration: 12s<br>Shuffle Write: 248.3MiB | Duration: 20s<br>Shuffle Write: 13.6MiB  |
 | 4 cores, 200 partitions  | Duration: 23s<br>Shuffle Write: 258.9MiB | Duration: 27s<br>Shuffle Write: 29.1MiB  |
 | 4 cores, 1000 partitions | Duration: 27s<br>Shuffle Write: 410.0MiB | Duration: 38s<br>Shuffle Write: 215.0MiB |
-![](Pasted%20image%2020240730213800.png)
+![](Images/Pasted%20image%2020240730213800.png)
 Observations:
 - `groupByKey` shuffles data a lot, on average 10 times more than `reduceByKey`
 - The duration of `groupByKey` and `reduceByKey` don't have much difference

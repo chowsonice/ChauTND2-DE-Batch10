@@ -20,20 +20,10 @@ def parseLine(line):
     value = int(fields[1])
     return (key, value)
 
-
 lines = sc.textFile('./key-value-10m-3.txt')
 rdd = lines.map(parseLine)
 
-######### use groupByKey()
 
-def groupByKeyJob(rdd):
-    averages = rdd.groupByKey() \
-                .mapValues(lambda x : sum(x) / len(x)) \
-                .sortByKey() \
-                .collect()
-    with open('key-value-average-3.txt', 'w') as file:
-        for average in averages:
-            file.write(str(average[0]) + ' ' + str(average[1]) + '\n')
         
 # ######### use reduceByKey()
 
@@ -49,8 +39,6 @@ def reduceByKeyJob(rdd):
         for average in averages:
             file.write(str(average[0]) + ' ' + str(average[1]) + '\n')
 
-groupByKeyJob(rdd)
 reduceByKeyJob(rdd)
-sleep(100000)
 
 
